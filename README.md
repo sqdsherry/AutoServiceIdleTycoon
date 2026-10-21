@@ -1,141 +1,44 @@
-# Auto Service Tycoon
+# 🚗 Auto Service Tycoon — 3D Idle & Management Architecture Showcase
 
-3D idle-тайкун про автосервис — тестовое задание на позицию Unity Developer.
+![Unity Version](https://img.shields.io/badge/Unity-6000.3.17f1%20URP-black?style=flat&logo=unity)
+![Tests](https://img.shields.io/badge/EditMode%20Tests-325%20Passed-emerald?style=flat)
+![Architecture](https://img.shields.io/badge/Architecture-Asmdef%20Layered%20%2B%20Pure%20DI-blue?style=flat)
+![Dataflow](https://img.shields.io/badge/Dataflow-Zero--Alloc%20Struct%20EventBus-purple?style=flat)
+![Assets](https://img.shields.io/badge/Assets-Kenney%20CC0%201.0-orange?style=flat)
 
-Машины сами заезжают на парковку и в боксы, игрок работает на постах, носит расходники со склада, строит новые
-боксы и парковочные места, нанимает персонал и открывает вторую локацию — тюнинг-центр, где машины после
-обслуживания меняют внешний вид.
+A production-ready 3D Idle / Management Tycoon prototype built in **Unity 6 (URP)**. Designed with enterprise-grade clean architecture, assembly-level decoupling (`.asmdef`), zero-allocation dataflows, pure C# dependency injection (Composition Root), and comprehensive automated test coverage (**325 EditMode unit tests**).
 
-| | |
-|---|---|
-| Движок | Unity **6000.3.17f1**, URP |
-| Платформа | PC, landscape; интерфейс на английском |
-| Сторонние библиотеки | **нет** — только пакеты `com.unity.*` (Input System, AI Navigation, TextMesh Pro, URP) |
-| Тесты | 325 EditMode-тестов |
+---
 
-## Запуск
+## 🎮 Core Gameplay Loop
 
-1. Откройте папку проекта в Unity Hub (версия `6000.3.17f1`). Первый импорт занимает несколько минут.
-2. Нажмите **Play** в любой сцене: Editor-утилита всегда стартует с `Boot`, как в билде.
-   Цепочка: `Boot` → экран загрузки → `MainMenu` → **New Game** / **Continue** → `Gameplay`.
+* **Autonomous Traffic Flow**: Vehicles dynamically navigate a road graph, queue up at barriers, park, and enter assigned service bays.
+* **Service & Station Operations**: Players and hired staff process vehicles across multiple stations (Wash Bays, Oil Change).
+* **Logistics & Supplies**: Stations consume consumable crates. Players and hired warehouse workers restock stations based on prioritized demand.
+* **Expansion & Upgrades**: Expand parking slots, unlock new service bays, hire workers, and unlock **Location 2 (Tuning Center)**.
+* **Dynamic Customization**: Vehicles moving through the Tuning Center visibly alter their appearance (sports body kits, custom racing rims, dynamic paint jobs).
 
-## Управление
+---
 
-| Действие | Ввод |
-|---|---|
-| Идти, работать на посту, взять ящик | **ЛКМ** по полу или объекту |
-| Камера | **WASD** / стрелки / курсор у края экрана |
-| Зум | колесо мыши |
-| Камеру к персонажу | **Space** |
-| Пауза / закрыть окно | **Esc** |
-| Debug-панель | **F1** или кнопка `F1` в углу экрана |
+## ⚡ Quick Evaluation Guide (F1 In-Game Cheat Console)
 
-Строительство, найм и улучшения работают по принципу «подойди и постой»: персонаж встаёт на полупрозрачный
-участок или синюю площадку, заполняется кольцо — открывается панель покупки.
+To evaluate the entire progression and architecture in **under 2 minutes**, a custom Debug Console is built-in:
 
-## Как проверить
+1. Hit **Play** (starts via `Boot` scene setup). Select **New Game** $\to$ Press **`F1`** (or the on-screen `F1` button).
+2. Click **`+$10,000`**, then click **`+1 Level`** three times to instantly unlock progression gates.
+3. Build new bays on Location 1, step onto the blue interaction pads to hire automated staff and buy station upgrades.
+4. Click **`Teleport: Location 2`** to immediately transition to the Tuning & Customization Center.
+5. Construct **Tires, Tuning, and Paint bays** to observe real-time vehicle mesh and material modifications.
+6. Press **`Esc` $\to$ Main Menu $\to$ Continue**: Verify that persistence properly restores wallet balances, level progression, active staff, and constructed plots.
+7. *(Optional)* Click **`Reset Progress`** in the F1 console to wipe save data and restart clean.
 
-### Быстро — 2 минуты через F1
+---
 
-1. **New Game** → нажмите **F1**.
-2. `+ $10,000`, затем `+1 Level` три раза — откроется окно уровня со списком новых построек.
-3. Постройте что-нибудь на первой локации, встаньте на синюю площадку поста — наймите работника, купите улучшение.
-4. `Teleport: Location 2` — появится приветственное окно тюнинг-центра.
-5. Постройте **Tires**, **Tuning** и **Paint** и понаблюдайте за машинами: после шиномонтажа — гоночные диски,
-   после тюнинга — спортивный кузов, после покраски — новый цвет.
-6. Выйдите в меню (**Esc** → Main Menu) и нажмите **Continue** — деньги, уровень, постройки и персонал на месте.
+## 🏗️ Architecture & Engineering Design
 
-`Reset Progress` в панели удаляет сохранение и перезапускает сцену; настройки звука и графики не трогает.
+The codebase (`Assets/_Project/Scripts`) enforces strict **Assembly Definition (`.asmdef`) boundaries**:
 
-### Обычная сессия — 5–10 минут до второй локации
-
-1. Старт — $100; открыты парковка, мойка и два въездных шлагбаума.
-2. Кликните по шлагбауму или посту — персонаж встаёт на рабочую точку и обслуживает машины.
-   Пока на точке кто-то стоит (игрок или работник), идёт работа; ушёл — пауза.
-3. Каждая услуга тратит расходник поста. Кончился — возьмите ящик на складе и отнесите к посту
-   (позже это делает нанятый кладовщик).
-4. Деньги и XP идут за каждую услугу. Уровни: 2 — 15 XP, 3 — 35, 4 — 70, 5 — 110, далее +50 за уровень.
-5. На уровне 2 за $250 открывается переезд на вторую локацию.
-
-| Уровень | Что открывается |
-|---|---|
-| 1 | Wash Bay 1 |
-| 2 | Wash Bay 2, Parking Spot 3, переезд на локацию 2, Tires (локация 2) |
-| 3 | Oil Change 1, Parking Spot 4, кладовщик, Tuning (локация 2) |
-| 4 | Oil Change 2, Paint (локация 2) |
-
-Прогресс сохраняется автоматически: каждые 30 секунд, после покупок, при паузе и при выходе.
-
-## Что реализовано (по пунктам ТЗ)
-
-| Требование | Реализация |
-|---|---|
-| Ядро игры | `GameLoop` с фазами тика; посты обслуживания (`ServicePointService`); поток машин по графу дорог с очередями, шлагбаумами и парковкой (`LocationTraffic`, `CarAgents`) |
-| Строительство и расширение | Участки построек из конфигов (`BuildService`, `BuildPlotView`): боксы, парковочные места, переезд на вторую локацию |
-| AI | Машины — по графу дорог с зонами слияния; работники и кладовщики — по NavMesh (`StaffService`, `StaffAgents`); кладовщик носит ящики туда, где расходника меньше всего |
-| Ресурсы / баланс | Кошелёк (`WalletService`), цены из конфига, расходники постов (`SupplyService`) |
-| Сохранения | JSON-файл в `persistentDataPath` с атомарной записью и резервной копией (`FileSaveStorage`, `SaveCoordinator`): деньги, XP, постройки, улучшения, персонал, запасы |
-| Прогрессия | Таблица уровней (`LevelTable`), XP за услуги, постройки открываются уровнем (`LevelUnlockGate`), вторая локация с новыми услугами |
-| Главное меню | Continue / New Game (с подтверждением) / Settings / Quit |
-| Настройки | Громкость SFX и музыки, качество, полноэкранный режим, разрешение; сохраняются в `PlayerPrefs` |
-| Экран загрузки | Асинхронная загрузка сцен с прогресс-баром и подсказками (`UnitySceneLoader`, `LoadingScreenView`) |
-| Внутриигровой UI | Баланс, уровень и XP-бар, пауза, панели постройки / найма / улучшений, HUD постов, всплывающие «+$», окна уровня и второй локации |
-| Доп. системы | Кастомизация машин на второй локации (диски, спортивный кузов, покраска); звук: клик на всех кнопках, деньги, завершение услуги, новый уровень |
-
-## Архитектура
-
-Код — `Assets/_Project/Scripts`, по сборке (`.asmdef`) на слой:
-
-```
-Presentation ──► Services ──► Domain
-Infrastructure ──► Services, Domain   (реализует интерфейсы Services)
-Bootstrap ──► все (Composition Root)
-```
-
-| Слой | Что внутри |
-|---|---|
-| Domain | Модели и правила: деньги, посты, очереди, парковка, уровни. Без `UnityEngine` |
-| Services | Игровая логика и контракты (`IWalletService`, `ISaveService`, `IAudioService`…). Без `UnityEngine` |
-| Infrastructure | Реализации на Unity: ScriptableObject-конфиги, сохранение в файл, настройки, звук, загрузка сцен |
-| Presentation | MonoBehaviour-вью и презентеры (MVP): HUD, панели, персонаж, машины, камера |
-| Bootstrap | Точки входа сцен и инсталлеры |
-
-- **DI без фреймворков.** `ProjectEntryPoint` в сцене `Boot` живёт всю сессию и создаёт проектные сервисы
-  (сохранение, настройки, звук, загрузка сцен). Каждая сцена получает их в `ISceneEntryPoint.Enter`;
-  `GameplayEntryPoint` собирает сцену набором инсталлеров. Зависимости — через конструктор или `Construct(...)`,
-  без синглтонов и `FindObjectOfType`.
-- **Один геймплейный `Update`.** Всё тикает через `GameLoop` по фазам
-  `Input → Simulation → Traffic → Staff → Agents → Trackers → Presentation`. Исключение — `LateUpdate` камеры,
-  которая следует за персонажем после шага NavMesh.
-- **События.** Сквозные — через `IEventBus` (`readonly struct`, без аллокаций), локальные — C#-события сервисов.
-  У каждой подписки есть отписка.
-- **Данные в конфигах.** Цены, уровни, постройки, типы машин и услуг — ScriptableObject в `Assets/_Project/Configs`.
-- **Пауза** — счётчик в `IPauseService`; UI-анимации идут на unscaled time.
-
-Подробнее: [`Docs/TDD.md`](Docs/TDD.md) — архитектура и контракты модулей, [`Docs/GDD.md`](Docs/GDD.md) — геймдизайн.
-
-## Тесты
-
-`Assets/_Project/Tests/EditMode` — Window → General → Test Runner → EditMode → Run All.
-Покрыты доменные правила, экономика, трафик, сохранение и восстановление, прогрессия, презентеры.
-
-## Ассеты и лицензии
-
-Все ассеты бесплатные, лицензия **CC0 1.0** (public domain) — [Kenney.nl](https://kenney.nl):
-
-| Пак | Что взято |
-|---|---|
-| Car Kit, Racing Kit | машины, колёса, тюнинг |
-| City Kit — Commercial, Suburban, Roads | здания, дороги, окружение |
-| Conveyor Kit | склад и ящики |
-| Mini Characters | персонаж и персонал |
-| UI Pack | кнопки, панели, иконки |
-| Kenney Audio | звуковые эффекты |
-
-Лицензии лежат рядом с паками: `Assets/_Project/Art/Kenney/*/License.txt`.
-Шрифт — LiberationSans из TextMesh Pro (SIL Open Font License).
-
-## Ограничения
-
-- Фоновой музыки нет: громкость музыки сохраняется в настройках, но озвучивать пока нечего.
-- Опциональные пункты ТЗ (переговоры, торговля валютой, диалоги ботов) не реализованы.
+```text
+Presentation ────► Services ────► Domain (No UnityEngine)
+Infrastructure ──► Services, Domain (Implements service contracts)
+Bootstrap ───────► All (Composition Root)
