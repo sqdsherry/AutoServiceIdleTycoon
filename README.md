@@ -6,11 +6,22 @@
 ![Dataflow](https://img.shields.io/badge/Dataflow-Zero--Alloc%20Struct%20EventBus-purple?style=flat)
 ![Assets](https://img.shields.io/badge/Assets-Kenney%20CC0%201.0-orange?style=flat)
 
+<p align="center">
+  <a href="ТВОЯ_ССЫЛКА_НА_YOUTUBE" target="_blank">
+    <img src="https://img.youtube.com/vi/9n1WJOhTLrE/maxresdefault.jpg" alt="Watch Auto Service Tycoon Gameplay" width="100%">
+  </a>
+</p>
+<p align="center">
+  <b><a href="https://youtu.be/9n1WJOhTLrE">▶️ Watch Full Gameplay & Architecture Demo on YouTube (1:35)</a></b>
+</p>
 A production-ready 3D Idle / Management Tycoon prototype built in **Unity 6 (URP)**. Designed with enterprise-grade clean architecture, assembly-level decoupling (`.asmdef`), zero-allocation dataflows, pure C# dependency injection (Composition Root), and comprehensive automated test coverage (**325 EditMode unit tests**).
 
 ---
 
 ## 🎮 Core Gameplay Loop
+
+
+
 
 * **Autonomous Traffic Flow**: Vehicles dynamically navigate a road graph, queue up at barriers, park, and enter assigned service bays.
 * **Service & Station Operations**: Players and hired staff process vehicles across multiple stations (Wash Bays, Oil Change).
