@@ -7,7 +7,7 @@
 ![Assets](https://img.shields.io/badge/Assets-Kenney%20CC0%201.0-orange?style=flat)
 
 <p align="center">
-  <a href="ТВОЯ_ССЫЛКА_НА_YOUTUBE" target="_blank">
+  <a href="https://youtu.be/9n1WJOhTLrE" target="_blank">
     <img src="https://img.youtube.com/vi/9n1WJOhTLrE/maxresdefault.jpg" alt="Watch Auto Service Tycoon Gameplay" width="100%">
   </a>
 </p>
