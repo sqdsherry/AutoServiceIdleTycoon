@@ -1,55 +1,48 @@
-# 🚗 Auto Service Tycoon — 3D Idle & Management Architecture Showcase
+# Auto Service Tycoon
 
-![Unity Version](https://img.shields.io/badge/Unity-6000.3.17f1%20URP-black?style=flat&logo=unity)
-![Tests](https://img.shields.io/badge/EditMode%20Tests-325%20Passed-emerald?style=flat)
-![Architecture](https://img.shields.io/badge/Architecture-Asmdef%20Layered%20%2B%20Pure%20DI-blue?style=flat)
-![Dataflow](https://img.shields.io/badge/Dataflow-Zero--Alloc%20Struct%20EventBus-purple?style=flat)
-![Assets](https://img.shields.io/badge/Assets-Kenney%20CC0%201.0-orange?style=flat)
+A 3D idle / management portfolio prototype built with Unity 6 and URP. Players operate a car service, expand its facilities and automate work with staff.
 
-<p align="center">
-  <a href="https://youtu.be/9n1WJOhTLrE" target="_blank">
-    <img src="https://img.youtube.com/vi/9n1WJOhTLrE/maxresdefault.jpg" alt="Watch Auto Service Tycoon Gameplay" width="100%">
-  </a>
-</p>
-<p align="center">
-  <b><a href="https://youtu.be/9n1WJOhTLrE">▶️ Watch Full Gameplay & Architecture Demo on YouTube (1:35)</a></b>
-</p>
-A production-ready 3D Idle / Management Tycoon prototype built in **Unity 6 (URP)**. Designed with enterprise-grade clean architecture, assembly-level decoupling (`.asmdef`), zero-allocation dataflows, pure C# dependency injection (Composition Root), and comprehensive automated test coverage (**325 EditMode unit tests**).
+[![Auto Service Tycoon gameplay](https://img.youtube.com/vi/9n1WJOhTLrE/hqdefault.jpg)](https://youtu.be/9n1WJOhTLrE)
 
----
+[Watch the gameplay demo](https://youtu.be/9n1WJOhTLrE)
 
-## 🎮 Core Gameplay Loop
+## Implemented systems
 
+- Vehicle routing, entry queues, parking and service bays.
+- Service operations and consumable supplies for the player and staff.
+- Economy, facility upgrades, hiring and location progression.
+- A second location with vehicle appearance customization.
+- Save / continue flow and an in-game debug console.
 
+## Code organization
 
-
-* **Autonomous Traffic Flow**: Vehicles dynamically navigate a road graph, queue up at barriers, park, and enter assigned service bays.
-* **Service & Station Operations**: Players and hired staff process vehicles across multiple stations (Wash Bays, Oil Change).
-* **Logistics & Supplies**: Stations consume consumable crates. Players and hired warehouse workers restock stations based on prioritized demand.
-* **Expansion & Upgrades**: Expand parking slots, unlock new service bays, hire workers, and unlock **Location 2 (Tuning Center)**.
-* **Dynamic Customization**: Vehicles moving through the Tuning Center visibly alter their appearance (sports body kits, custom racing rims, dynamic paint jobs).
-
----
-
-## ⚡ Quick Evaluation Guide (F1 In-Game Cheat Console)
-
-To evaluate the entire progression and architecture in **under 2 minutes**, a custom Debug Console is built-in:
-
-1. Hit **Play** (starts via `Boot` scene setup). Select **New Game** $\to$ Press **`F1`** (or the on-screen `F1` button).
-2. Click **`+$10,000`**, then click **`+1 Level`** three times to instantly unlock progression gates.
-3. Build new bays on Location 1, step onto the blue interaction pads to hire automated staff and buy station upgrades.
-4. Click **`Teleport: Location 2`** to immediately transition to the Tuning & Customization Center.
-5. Construct **Tires, Tuning, and Paint bays** to observe real-time vehicle mesh and material modifications.
-6. Press **`Esc` $\to$ Main Menu $\to$ Continue**: Verify that persistence properly restores wallet balances, level progression, active staff, and constructed plots.
-7. *(Optional)* Click **`Reset Progress`** in the F1 console to wipe save data and restart clean.
-
----
-
-## 🏗️ Architecture & Engineering Design
-
-The codebase (`Assets/_Project/Scripts`) enforces strict **Assembly Definition (`.asmdef`) boundaries**:
+The project separates domain models from gameplay services and Unity presentation using assembly definitions. Dependencies are composed in entry points with a small custom container.
 
 ```text
-Presentation ────► Services ────► Domain (No UnityEngine)
-Infrastructure ──► Services, Domain (Implements service contracts)
-Bootstrap ───────► All (Composition Root)
+Presentation ---> Services ---> Domain
+Infrastructure -------------> Services, Domain
+Bootstrap ------------------> Composition and scene setup
+```
+
+Examples to review:
+
+- [Wallet](Assets/_Project/Scripts/Domain/Economy/Wallet.cs): balance changes and affordability checks.
+- [Save storage](Assets/_Project/Scripts/Infrastructure/Save/FileSaveStorage.cs): temporary-file writes, replacement and a backup file.
+- [Bootstrap](Assets/_Project/Scripts/Bootstrap): dependency registration and scene entry points.
+- [EditMode tests](Assets/_Project/Tests/EditMode): domain and service behavior checks.
+
+## Open and explore
+
+1. Open the project with **Unity 6000.3.17f1** and let Unity resolve its packages.
+2. Open `Assets/_Project/Scenes/Boot.unity` and enter Play Mode.
+3. Start a new game. Use `F1` or the on-screen F1 button to open the debug console.
+4. Add money and levels to explore buildings, staff and the second location without waiting for normal progression.
+5. Return to the main menu and choose Continue to inspect the save flow.
+
+To run the included tests, open Unity's Test Runner and select EditMode. No passing-test count or coverage percentage is asserted by this README; use the result of a fresh run.
+
+## Scope
+
+This is a portfolio prototype, not a published commercial release. It demonstrates gameplay systems and code organization. Mobile-device performance and allocation figures are not reported here.
+
+The project uses Kenney assets; see the asset folders for included license information.
